@@ -1,0 +1,58 @@
+CREATE TABLE BIT_DB.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness text NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL 
+);
+
+Select * From BIT_DB.spotifydata;
+
+
+--Sorted songs by popularity to see if song duration effects a track's poularity--
+Select artist_name, track_name, popularity, duration_ms
+FROM BIT_DB.Spotifydata
+Order By popularity desc;
+
+--Found number of songs by single artist in database using this query--
+Select count(artist_name)
+From BIT_DB.spotifydata
+where artist_name = 'Doja Cat';
+
+--What is the average danceability by artist and track?--
+Select artist_name, track_name, avg(danceability)
+from BIT_DB.Spotifydata
+Group by artist_name, track_name
+order by avg(danceability) DESC;
+
+--Who are the top 10 artists based on popularity?--
+Select artist_name, max(popularity) 
+from BIT_DB.Spotifydata
+group by artist_name
+order by max(popularity) desc
+Limit 10;
+
+--What artist released the longest song?--
+Select artist_name, max(duration_ms)
+from BIT_DB.Spotifydata
+group by artist_name
+Order by max(duration_ms) Desc
+Limit 1;
+
+--Whats the average danceability for the top 10 most popular songs?
+Select AVG(danceability)
+From BIT_DB.Spotifydata
+Where track_name IN(Select track_name FROM BIT_DB.Spotifydata ORDER BY popularity desc Limit 10);
